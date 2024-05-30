@@ -25,9 +25,12 @@ jobs:
         run: npm test
 
       - name: Deploy backend to Render.com
+        env:
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
         run: |
           npm install -g render-cli
-          render deploy --service-id ${{ secrets.RENDER_SERVICE_ID }} --api-key ${{ secrets.RENDER_API_KEY }}
+          render deploy --service-id $RENDER_SERVICE_ID --api-key $RENDER_API_KEY
 
   deploy:
     needs: build
@@ -49,4 +52,6 @@ jobs:
         run: npm run build
 
       - name: Deploy frontend to Vercel
-        run: vercel --prod --token ${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel --prod --token $VERCEL_TOKEN
